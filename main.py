@@ -2,7 +2,7 @@ import random  # Importiert das Modul random, um zufällige Auswahl zu ermöglic
 from colorama import Fore, Style  # Importiert Fore und Style von colorama, um farbige Ausgabe in der Konsole zu ermöglichen (pip install colorama)
 
 def load_words(filename):  # Definiert eine Funktion, die Wörter aus einer Datei lädt
-    with open(filename, 'r') as file:  # Öffnet die Datei im Lese-Modus
+    with open(filename, 'r', encoding='utf-8') as file:  # Öffnet die Datei im Lese-Modus mit der richtigen Codierung
         words = [word.upper() for word in file.read().splitlines() if word]  # Liest die Datei, teilt sie in Zeilen auf, wandelt die Wörter in Großbuchstaben um und ignoriert leere Wörter
     for word in words:  # Überprüft jedes Wort in der Liste
         if len(word) != 5 or not word.isalpha():  # Wenn das Wort nicht genau 5 Buchstaben lang ist oder nicht nur Buchstaben enthält
