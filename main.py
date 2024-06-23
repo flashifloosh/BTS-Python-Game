@@ -9,15 +9,15 @@ def load_words(filename):  # Definiert eine Funktion, die Wörter aus einer Date
             raise ValueError(f"Ungültiges Wort '{word}' in der Wortliste. Alle Wörter müssen genau 5 Buchstaben lang sein und dürfen keine Zahlen enthalten.")  # Löst eine Ausnahme aus
     return words  # Gibt die Liste der Wörter zurück
 
-def replay_menu():
+def restart_menu():
     while True:
-        replay = input("Möchtest du noch einmal spielen? (Y/n): ").lower()
-        if replay == "y":
+        replay = input("Möchtest du noch einmal spielen? (Y/n): ").lower()  # Fordert den Benutzer auf, 'y' oder 'n' einzugeben und wandelt es in Kleinbuchstaben um (Y ist Standardwert)
+        if replay == "y" or replay == "":  # Wenn der Benutzer 'y' oder Enter eingibt
             return True
         elif replay == "n":
             return False
         else:
-            print("Fehler: Bitte gebe 'y' oder 'n' ein.")
+            print("Fehler: Bitte gebe 'y' oder 'n' ein.")  # Gibt eine Fehlermeldung aus, wenn der Benutzer etwas anderes als 'y', Enter oder 'n' eingibt
 
 def play_wordle(words, max_attempts=5):  # Definiert eine Funktion, um das Spiel Wordle zu spielen
     word_to_guess = random.choice(words)  # Wählt ein zufälliges Wort aus der Liste der Wörter
@@ -46,11 +46,20 @@ def play_wordle(words, max_attempts=5):  # Definiert eine Funktion, um das Spiel
 
         if feedback.count(Fore.GREEN) == len(word_to_guess):  # Überprüft, ob die Anzahl der grünen Zeichen gleich der Länge des zu erratenden Wortes ist
             print("\nDu hast gewonnen! Das Wort war:", word_to_guess) # Gibt eine Gewinnnachricht und das zu erratende Wort aus
-
-            return replay_menu() # Beendet die Funktion
+            if not restart_menu():  # Wenn das Spiel nicht erneut gestartet werden soll
+                break  # Beendet die Schleife
+            else:  # Wenn das Spiel erneut gestartet werden soll
+                word_to_guess = random.choice(words)  # Wählt ein neues zufälliges Wort aus der Liste der Wörter
+                attempts = 0  # Setzt die Anzahl der Versuche auf 0
+                continue  # Startet die Schleife erneut
 
         attempts += 1  # Erhöht die Anzahl der Versuche um 1
-    print("\nDu hast verloren. Das Wort war:", word_to_guess)  # Gibt eine Verlustnachricht und das zu erratende Wort aus, wenn die maximale Anzahl der Versuche erreicht ist
+
+    if attempts == max_attempts:
+        print("\nDu hast verloren. Das Wort war:", word_to_guess)  # Gibt eine Verlustnachricht und das zu erratende Wort aus, wenn die maximale Anzahl der Versuche erreicht ist
+
+    if restart_menu():
+        play_wordle(words)  # Startet das Spiel erneut
 
 words = load_words('words.txt')  # Lädt die Wörter aus der Datei 'words.txt'
 play_wordle(words)  # Startet das Spiel Wordle mit den geladenen Wörtern
