@@ -9,6 +9,16 @@ def load_words(filename):  # Definiert eine Funktion, die Wörter aus einer Date
             raise ValueError(f"Ungültiges Wort '{word}' in der Wortliste. Alle Wörter müssen genau 5 Buchstaben lang sein und dürfen keine Zahlen enthalten.")  # Löst eine Ausnahme aus
     return words  # Gibt die Liste der Wörter zurück
 
+def replay_menu():
+    while True:
+        replay = input("Möchtest du noch einmal spielen? (Y/n): ").lower()
+        if replay == "y":
+            return True
+        elif replay == "n":
+            return False
+        else:
+            print("Fehler: Bitte gebe 'y' oder 'n' ein.")
+
 def play_wordle(words, max_attempts=5):  # Definiert eine Funktion, um das Spiel Wordle zu spielen
     word_to_guess = random.choice(words)  # Wählt ein zufälliges Wort aus der Liste der Wörter
     attempts = 0  # Setzt die Anzahl der Versuche auf 0
@@ -28,15 +38,16 @@ def play_wordle(words, max_attempts=5):  # Definiert eine Funktion, um das Spiel
             if guess[i] == word_to_guess[i]:  # Überprüft, ob das Zeichen an der gleichen Position im eingegebenen Wort und im zu erratenden Wort gleich ist
                 feedback += Fore.GREEN + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in grüner Farbe zum Feedback hinzu, wenn es an der gleichen Position ist
             elif guess[i] in word_to_guess:  # Überprüft, ob das Zeichen im zu erratenden Wort vorkommt, aber nicht an der gleichen Position
-                feedback += Fore.YELLOW + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in gelber Farbe zum Feedback hinzu, wenn es im Wort vorkommt, aber nicht an der gleichen Position
+                feedback += Fore.BLUE + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in blauer Farbe zum Feedback hinzu, wenn es im Wort vorkommt, aber nicht an der gleichen Position
             else:  # Wenn das Zeichen weder im Wort vorkommt noch an der gleichen Position ist
                 feedback += '\u25A0'  # Fügt ein schwarzes Quadrat zum Feedback hinzu
 
         print("\n", feedback)  # Gibt das Feedback aus
 
         if feedback.count(Fore.GREEN) == len(word_to_guess):  # Überprüft, ob die Anzahl der grünen Zeichen gleich der Länge des zu erratenden Wortes ist
-            print("\nDu hast gewonnen! Das Wort war:", word_to_guess)  # Gibt eine Gewinnnachricht und das zu erratende Wort aus
-            return  # Beendet die Funktion
+            print("\nDu hast gewonnen! Das Wort war:", word_to_guess) # Gibt eine Gewinnnachricht und das zu erratende Wort aus
+
+            return replay_menu() # Beendet die Funktion
 
         attempts += 1  # Erhöht die Anzahl der Versuche um 1
     print("\nDu hast verloren. Das Wort war:", word_to_guess)  # Gibt eine Verlustnachricht und das zu erratende Wort aus, wenn die maximale Anzahl der Versuche erreicht ist
