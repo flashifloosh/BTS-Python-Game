@@ -34,11 +34,14 @@ def play_wordle(words, max_attempts=5):  # Definiert eine Funktion, um das Spiel
             continue  # Springt zum nächsten Durchlauf der Schleife
 
         feedback = ''  # Initialisiert die Feedback-Variable als leeren String
+        word_to_guess_copy = list(word_to_guess)  # Erstellt eine Kopie des zu erratenden Wortes
         for i in range(len(word_to_guess)):  # Durchläuft jedes Zeichen im zu erratenden Wort
-            if guess[i] == word_to_guess[i]:  # Überprüft, ob das Zeichen an der gleichen Position im eingegebenen Wort und im zu erratenden Wort gleich ist
+            if guess[i] == word_to_guess[i] and guess[i] in word_to_guess_copy:  # Überprüft, ob das Zeichen an der gleichen Position im eingegebenen Wort und im zu erratenden Wort gleich ist und ob es in der Kopie des zu erratenden Wortes vorhanden ist
                 feedback += Fore.GREEN + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in grüner Farbe zum Feedback hinzu, wenn es an der gleichen Position ist
-            elif guess[i] in word_to_guess:  # Überprüft, ob das Zeichen im zu erratenden Wort vorkommt, aber nicht an der gleichen Position
-                feedback += Fore.BLUE + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in blauer Farbe zum Feedback hinzu, wenn es im Wort vorkommt, aber nicht an der gleichen Position
+                word_to_guess_copy.remove(guess[i])  # Entfernt das richtig geratene Zeichen aus der Kopie des zu erratenden Wortes
+            elif guess[i] in word_to_guess_copy:  # Überprüft, ob das Zeichen im eingegebenen Wort im zu erratenden Wort vorkommt
+                feedback += Fore.BLUE + guess[i] + Style.RESET_ALL  # Fügt das Zeichen in blauer Farbe zum Feedback hinzu
+                word_to_guess_copy.remove(guess[i])  # Entfernt das geratene Zeichen aus der Kopie des zu erratenden Wortes
             else:  # Wenn das Zeichen weder im Wort vorkommt noch an der gleichen Position ist
                 feedback += '\u25A0'  # Fügt ein schwarzes Quadrat zum Feedback hinzu
 
